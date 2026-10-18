@@ -1,0 +1,62 @@
+{
+    "common": {
+        "name": "Kompakti UV-indeksi",
+        "description": "UV-indeksi aurinkona, jossa on säde jokaista indeksin askelta kohden, sekä sen taso ja päivän huippu",
+        "invalid_configuration": "Valitse kortille UV-indeksin sensori",
+        "invalid_hourly_chart_hours": "Indeksikaavion tuntimäärän on oltava luku",
+        "invalid_daily_chart_days": "Pylväiden päivien määrän on oltava luku",
+        "no_entity": "Sensoria ei löydy:",
+        "index": "UV-indeksi",
+        "index_short": "UV",
+        "peak": "Huippu tänään",
+        "peak_short": "Huippu",
+        "yesterday": "Eilen",
+        "week": "7 päivää",
+        "month": "30 päivää",
+        "daily_chart": "Päivän huippu, {days} pv",
+        "hourly_chart": "UV-indeksi, {hours} h",
+        "yesterday_short": "1 pv",
+        "week_short": "7 pv",
+        "month_short": "30 pv",
+        "daily_chart_short": "Huippu, {days} pv",
+        "hourly_chart_short": "UV, {hours} h"
+    },
+    "level": {
+        "low": "Heikko",
+        "moderate": "Kohtalainen",
+        "high": "Voimakas",
+        "very_high": "Erittäin voimakas",
+        "extreme": "Äärimmäisen voimakas"
+    },
+    "advice": {
+        "protect": "Suojaudu keskipäivällä. Varjo, vaatteet, hattu ja aurinkovoide.",
+        "avoid": "Vältä keskipäivän aurinkoa. Hakeudu varjoon ja käytä vaatteita, hattua ja aurinkovoidetta."
+    },
+    "editor": {
+        "entity": "UV-indeksin sensori",
+        "entity_helper": "UV-indeksi juuri nyt.",
+        "border_colour": "Reunan väri",
+        "language": "Kieli",
+        "language_helper": "Tyhjänä Home Assistantin kieli.",
+        "interactions": "Toiminnot",
+        "tap_action": "Napautus",
+        "hold_action": "Pitkä painallus",
+        "double_tap_action": "Kaksoisnapautus",
+        "display": "Näkymä",
+        "animate_sun": "Aurinkoanimaatio",
+        "animate_sun_helper": "Palavat säteet hehkuvat, kun aurinko on ylhäällä.",
+        "show_level": "Taso",
+        "show_level_helper": "Palkit indeksin vieressä ja tason nimi sen alla, heikosta äärimmäisen voimakkaaseen.",
+        "show_advice": "Suojautumisohje",
+        "show_advice_helper": "Miten suojautua, kun indeksi on 3 tai yli.",
+        "show_yesterday": "Eilinen huippu",
+        "show_week": "Viimeisten 7 päivän huippu",
+        "show_month": "Viimeisten 30 päivän huippu",
+        "charts": "Kaaviot",
+        "show_daily_chart": "Päivän huiput pylväinä",
+        "daily_chart_days": "Päiviä pylväissä",
+        "show_hourly_chart": "Indeksikaavio",
+        "hourly_chart_hours": "Tunteja indeksikaaviossa",
+        "hourly_chart_hours_helper": "Enintään 168 eli viikko. Tallennin säilyttää historiaa oletuksena kymmenen päivää."
+    }
+}

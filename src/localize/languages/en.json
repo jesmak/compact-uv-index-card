@@ -1,0 +1,62 @@
+{
+    "common": {
+        "name": "Compact UV index",
+        "description": "The UV index as a sun with a ray for each step, with its level and the day's peak",
+        "invalid_configuration": "Choose a UV index sensor for the card",
+        "invalid_hourly_chart_hours": "Hours in the index chart must be a number",
+        "invalid_daily_chart_days": "Days in the bars must be a number",
+        "no_entity": "Sensor not found:",
+        "index": "UV index",
+        "index_short": "UV",
+        "peak": "Today's peak",
+        "peak_short": "Peak",
+        "yesterday": "Yesterday",
+        "week": "Past 7 days",
+        "month": "Past 30 days",
+        "daily_chart": "Daily peak, last {days} days",
+        "hourly_chart": "UV index, last {hours} h",
+        "yesterday_short": "1 d",
+        "week_short": "7 d",
+        "month_short": "30 d",
+        "daily_chart_short": "Peak, {days} d",
+        "hourly_chart_short": "UV, {hours} h"
+    },
+    "level": {
+        "low": "Low",
+        "moderate": "Moderate",
+        "high": "High",
+        "very_high": "Very high",
+        "extreme": "Extreme"
+    },
+    "advice": {
+        "protect": "Protect yourself around midday. Shade, clothing, a hat and sunscreen.",
+        "avoid": "Avoid the midday sun. Seek shade, and wear clothing, a hat and sunscreen."
+    },
+    "editor": {
+        "entity": "UV index sensor",
+        "entity_helper": "The UV index now.",
+        "border_colour": "Outline colour",
+        "language": "Language",
+        "language_helper": "Home Assistant's language when left empty.",
+        "interactions": "Interactions",
+        "tap_action": "Tap",
+        "hold_action": "Hold",
+        "double_tap_action": "Double tap",
+        "display": "Display",
+        "animate_sun": "Sun animation",
+        "animate_sun_helper": "The lit rays glow while the sun is up.",
+        "show_level": "Level",
+        "show_level_helper": "Bars beside the index and the level's name under it, from low to extreme.",
+        "show_advice": "Protection advice",
+        "show_advice_helper": "How to protect yourself, from index 3 up.",
+        "show_yesterday": "Yesterday's peak",
+        "show_week": "Peak of the last 7 days",
+        "show_month": "Peak of the last 30 days",
+        "charts": "Charts",
+        "show_daily_chart": "Daily peak bars",
+        "daily_chart_days": "Days in the bars",
+        "show_hourly_chart": "Index chart",
+        "hourly_chart_hours": "Hours in the index chart",
+        "hourly_chart_hours_helper": "Up to 168, a week. The recorder keeps the history for ten days by default."
+    }
+}
