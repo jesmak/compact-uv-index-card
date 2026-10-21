@@ -477,6 +477,19 @@ describe("what the recorder adds", () => {
     });
 });
 
+describe("the charts' marker lines", () => {
+    it("are written in the card's language", async () => {
+        const element = await card(hass("5.4", "en", { days: [5.4, 4.2] }), {
+            language: "fi",
+            show_daily_chart: true,
+            show_hourly_chart: true,
+        });
+        await settled(element);
+        const charts = [...root(element).querySelectorAll(".chart")] as Array<HTMLElement & { language: string }>;
+        expect(charts.map((chart) => chart.language)).toEqual(["fi", "fi"]);
+    });
+});
+
 describe("the narrowest card", () => {
     it("has short names for the peaks and the charts beside the long ones", async () => {
         const element = await card(hass("5.4", "fi", { days: [1, 2, 3, 4, 5, 6, 7, 8] }), {

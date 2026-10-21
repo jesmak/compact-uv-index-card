@@ -6,8 +6,8 @@ it.
 [![GitHub Release][releases-shield]][releases] [![GitHub Release Date][release-date-shield]][releases] [![HACS][hacs-shield]][hacs] [![License][license-shield]](LICENSE)
 
 <p>
-<img src="https://raw.githubusercontent.com/jesmak/compact-uv-index-card/main/docs/images/everything-light.png#gh-light-mode-only" width="400" alt="A sun with five of its twelve rays lit beside a UV index of 5.4, moderate, and today's peak, protection advice under it, then the peaks of yesterday, the past week and the past month, and bars of the last 14 days' peaks in their levels' colours">
-<img src="https://raw.githubusercontent.com/jesmak/compact-uv-index-card/main/docs/images/everything-dark.png#gh-dark-mode-only" width="400" alt="A sun with five of its twelve rays lit beside a UV index of 5.4, moderate, and today's peak, protection advice under it, then the peaks of yesterday, the past week and the past month, and bars of the last 14 days' peaks in their levels' colours">
+<img src="https://raw.githubusercontent.com/jesmak/compact-uv-index-card/main/docs/images/everything-light.png#gh-light-mode-only" width="400" alt="A sun with five of its twelve rays lit beside a UV index of 5.4, moderate, and today's peak, protection advice under it, then the peaks of yesterday, the past week and the past month, and bars of the last 14 days' peaks in their levels' colours against dashed lines marking 3 and 6">
+<img src="https://raw.githubusercontent.com/jesmak/compact-uv-index-card/main/docs/images/everything-dark.png#gh-dark-mode-only" width="400" alt="A sun with five of its twelve rays lit beside a UV index of 5.4, moderate, and today's peak, protection advice under it, then the peaks of yesterday, the past week and the past month, and bars of the last 14 days' peaks in their levels' colours against dashed lines marking 3 and 6">
 <img src="https://raw.githubusercontent.com/jesmak/compact-uv-index-card/main/docs/images/sizes-light.png#gh-light-mode-only" width="400" alt="The same card at five sizes in one section, from a quarter of its width and one row to all of it and three rows, the sun beside the figures, above them, or small beside unlabelled figures">
 <img src="https://raw.githubusercontent.com/jesmak/compact-uv-index-card/main/docs/images/sizes-dark.png#gh-dark-mode-only" width="400" alt="The same card at five sizes in one section, from a quarter of its width and one row to all of it and three rows, the sun beside the figures, above them, or small beside unlabelled figures">
 </p>
@@ -27,7 +27,8 @@ the index beside it and the day's highest so far. Tapping it opens the sensor's 
 - **Recent days**, if you want them: the highest index of yesterday, and of the past week and the past month (the
   last 7 and 30 days).
 - **Two small charts**, if you want them: each day's highest index as bars, and the index over the last hours as a
-  line, both in their levels' colours. Pointing at either, or touching it, shows the value there.
+  line, both in their levels' colours. Dashed lines mark where the colour changes to the next level, labelled with
+  the WHO's step, 3, 6, 8 or 11, as many as fit. Pointing at either chart, or touching it, shows the value there.
 
 It fits whatever space it is given. In a sections view it works at every width from a quarter of the section to all
 of it, and at one row or more. In a masonry view or a horizontal stack it is as tall as its contents need.

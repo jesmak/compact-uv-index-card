@@ -1,6 +1,6 @@
 {
     "name": "compact-uv-index-card",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "description": "Home Assistant dashboard card that shows the UV index as a sun with a ray for each step, sized for any grid column",
     "keywords": [
         "home-assistant",

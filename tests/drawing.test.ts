@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
-import { indexAt } from "../src/chart";
+import { MARKS, indexAt, lineOf, stepsShown } from "../src/chart";
+import type { CompactUvIndexChart } from "../src/chart";
 import { adviceOf, levelOf, roundedIndex } from "../src/levels";
 import { litRays } from "../src/sun";
 
@@ -46,5 +47,60 @@ describe("pointing at a chart", () => {
     it("picks the latest reading at that moment of a line", () => {
         expect(indexAt("line", items, 0.45, 0, 30)).toBe(1);
         expect(indexAt("line", items, 0.9, 0, 30)).toBe(2);
+    });
+});
+
+describe("the marker lines", () => {
+    it("are where the colour changes, half below each of the WHO's steps", () => {
+        for (const step of MARKS) {
+            expect(levelOf(lineOf(step) - 0.01)).not.toBe(levelOf(lineOf(step)));
+            expect(lineOf(step)).toBe(step - 0.5);
+        }
+    });
+
+    it.each([
+        [3, [3]],
+        [5.4, [3]],
+        [5.5, [3, 6]],
+        [6, [3, 6]],
+        [9, [3, 8]],
+        [12, [3, 8]],
+        [15, [6]],
+        [20, [6]],
+        [35, [8]],
+        [50, [11]],
+        [60, []],
+    ])("show the steps the chart reaches, apart enough for their values, at a top of %s", (top, steps) => {
+        expect(stepsShown(top)).toEqual(steps);
+    });
+});
+
+describe("the chart's axis", () => {
+    async function chart(values: number[], language: string): Promise<ShadowRoot> {
+        const element = document.createElement("compact-uv-index-chart") as CompactUvIndexChart;
+        element.kind = "bars";
+        element.floor = 3;
+        element.language = language;
+        element.items = values.map((value, index) => ({ time: index, value, colour: "#000", label: "" }));
+        document.body.append(element);
+        await element.updateComplete;
+        return element.shadowRoot as ShadowRoot;
+    }
+
+    it("labels each line with its step, at the line's height, with an unseen sizer for each label", async () => {
+        const root = await chart([2, 9], "fi");
+        const labels = [...root.querySelectorAll<HTMLElement>(".value")];
+        const lines = [...root.querySelectorAll(".mark")];
+        expect(labels.map((label) => label.textContent)).toEqual(["3", "8"]);
+        expect(labels.map((label) => parseFloat(label.style.top))).toEqual(
+            lines.map((line) => (Number(line.getAttribute("y1")) / 32) * 100),
+        );
+        expect([...root.querySelectorAll(".sizer")].map((sizer) => sizer.textContent)).toEqual(["3", "8"]);
+    });
+
+    it("is left out when no line fits, and the plot takes the whole width", async () => {
+        const root = await chart([60], "en");
+        expect(root.querySelector(".axis")).toBeNull();
+        expect(root.querySelectorAll(".mark")).toHaveLength(0);
     });
 });

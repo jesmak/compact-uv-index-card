@@ -452,6 +452,7 @@ export class CompactUvIndexCard extends LitElement {
             kind="bars"
             .items=${items}
             .floor=${CHART_FLOOR}
+            .language=${language}
             .heading=${this.text("common.daily_chart", { days: String(count) })}
             .brief=${this.text("common.daily_chart_short", { days: String(count) })}
         ></compact-uv-index-chart>`;
@@ -492,6 +493,7 @@ export class CompactUvIndexCard extends LitElement {
             .start=${start}
             .end=${end}
             .floor=${CHART_FLOOR}
+            .language=${language}
             .heading=${this.text("common.hourly_chart", { hours: String(hours) })}
             .brief=${this.text("common.hourly_chart_short", { hours: String(hours) })}
         ></compact-uv-index-chart>`;

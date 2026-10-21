@@ -1,4 +1,4 @@
-/*! compact-uv-index-card 1.0.0 | MIT License */
+/*! compact-uv-index-card 1.1.0 | MIT License */
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __decorateClass = (decorators, target, key, kind) => {
@@ -668,6 +668,10 @@ var GestureDetector = class {
 var WIDTH = 100;
 var HEIGHT = 32;
 var TOP = 2;
+var PLOT_HEIGHT = 30;
+var MARKS = [3, 6, 8, 11];
+var MARK_GAP = 10;
+var BASELINE_GAP = 5;
 var CompactUvIndexChart = class extends i4 {
   constructor() {
     super(...arguments);
@@ -678,29 +682,44 @@ var CompactUvIndexChart = class extends i4 {
     this.floor = 1;
     this.heading = "";
     this.brief = "";
+    this.language = "en";
   }
   render() {
     const values = this.items.map((item) => item.value ?? 0);
     const top = Math.max(this.floor, ...values);
     const active = this.active === void 0 ? void 0 : this.items[this.active];
     const x2 = active === void 0 ? 0 : this.xOf(this.active ?? 0);
+    const steps = stepsShown(top);
+    const number = new Intl.NumberFormat(this.language);
+    const y3 = (value) => HEIGHT - heightOf(value, top);
     return b2`
-            <div
-                class="plot"
-                @pointermove=${this.point}
-                @pointerdown=${(event) => {
+            <div class="frame">
+                ${steps.length === 0 ? A : b2`<div class="axis">
+                              ${steps.map((step) => b2`<span class="sizer">${number.format(step)}</span>`)}
+                              ${steps.map(
+      (step) => b2`<span class="value" style="top: ${y3(lineOf(step)) / HEIGHT * 100}%"
+                                          >${number.format(step)}</span
+                                      >`
+    )}
+                          </div>`}
+                <div
+                    class="plot"
+                    @pointermove=${this.point}
+                    @pointerdown=${(event) => {
       event.stopPropagation();
       this.point(event);
     }}
-                @pointerleave=${() => this.active = void 0}
-                @click=${(event) => event.stopPropagation()}
-            >
-                <svg viewBox="0 0 ${WIDTH} ${HEIGHT}" preserveAspectRatio="none" aria-hidden="true">
-                    <line class="baseline" x1="0" x2=${WIDTH} y1=${HEIGHT} y2=${HEIGHT}></line>
-                    ${this.kind === "bars" ? this.bars(top) : this.line(top)}
-                    ${active === void 0 || this.kind === "bars" ? A : w`<line class="cursor" x1=${x2} x2=${x2} y1="0" y2=${HEIGHT}></line>`}
-                </svg>
-                ${active === void 0 ? A : b2`<div class="bubble" style="left: ${x2}%; transform: translateX(-${x2}%)">${active.label}</div>`}
+                    @pointerleave=${() => this.active = void 0}
+                    @click=${(event) => event.stopPropagation()}
+                >
+                    <svg viewBox="0 0 ${WIDTH} ${HEIGHT}" preserveAspectRatio="none" aria-hidden="true">
+                        ${steps.map((step) => w`<line class="mark" x1="0" x2=${WIDTH} y1=${y3(lineOf(step))} y2=${y3(lineOf(step))}></line>`)}
+                        <line class="baseline" x1="0" x2=${WIDTH} y1=${HEIGHT} y2=${HEIGHT}></line>
+                        ${this.kind === "bars" ? this.bars(top) : this.line(top)}
+                        ${active === void 0 || this.kind === "bars" ? A : w`<line class="cursor" x1=${x2} x2=${x2} y1="0" y2=${HEIGHT}></line>`}
+                    </svg>
+                    ${active === void 0 ? A : b2`<div class="bubble" style="left: ${x2}%; transform: translateX(-${x2}%)">${active.label}</div>`}
+                </div>
             </div>
             <div class="heading"><span class="long">${this.heading}</span><span class="brief">${this.brief || this.heading}</span></div>
         `;
@@ -708,7 +727,7 @@ var CompactUvIndexChart = class extends i4 {
   bars(top) {
     const slot = WIDTH / Math.max(this.items.length, 1);
     return w`${this.items.map((item, index) => {
-      const height = item.value ? Math.max(item.value / top * (HEIGHT - TOP), 0.8) : 0;
+      const height = item.value ? Math.max(heightOf(item.value, top), 0.8) : 0;
       return w`<rect class=${index === this.active ? "bar active" : "bar"} x=${index * slot + slot * 0.15}
         y=${HEIGHT - height} width=${slot * 0.7} height=${height} style="fill: ${item.colour}"></rect>`;
     })}`;
@@ -719,7 +738,7 @@ var CompactUvIndexChart = class extends i4 {
     if (points.length === 0) {
       return w``;
     }
-    const y3 = (value) => HEIGHT - value / top * (HEIGHT - TOP);
+    const y3 = (value) => HEIGHT - heightOf(value, top);
     const path = points.map((point, index) => `${index === 0 ? "M" : "L"}${this.xAt(point.time)} ${y3(point.value ?? 0)}`).join(" ");
     const stops = points.map((point) => w`<stop offset=${this.xAt(point.time) / WIDTH} style="stop-color: ${point.colour}"></stop>`);
     return w`<defs><linearGradient id="levels" gradientUnits="userSpaceOnUse" x1="0" x2=${WIDTH} y1="0" y2="0"
@@ -762,11 +781,45 @@ var CompactUvIndexChart = class extends i4 {
             .brief {
                 display: none;
             }
+            .frame {
+                display: flex;
+                align-items: flex-start;
+                margin-bottom: 2px;
+            }
             .plot {
                 position: relative;
+                flex: 1;
+                min-width: 0;
                 height: 30px;
-                margin-bottom: 2px;
                 touch-action: pan-y;
+            }
+            .axis {
+                position: relative;
+                height: 30px;
+                margin-right: 4px;
+                font-size: 9px;
+                line-height: 9px;
+                color: var(--secondary-text-color);
+                font-variant-numeric: tabular-nums;
+            }
+            /* The values, unseen and on no line, give the axis the width of the widest. */
+            .sizer {
+                display: block;
+                height: 0;
+                overflow: hidden;
+                visibility: hidden;
+            }
+            .value {
+                position: absolute;
+                right: 0;
+                transform: translateY(-50%);
+                white-space: nowrap;
+            }
+            .mark {
+                stroke: var(--divider-color, rgba(127, 127, 127, 0.3));
+                stroke-width: 1px;
+                stroke-dasharray: 2 3;
+                vector-effect: non-scaling-stroke;
             }
             svg {
                 display: block;
@@ -857,11 +910,35 @@ __decorateClass([
   n4()
 ], CompactUvIndexChart.prototype, "brief", 2);
 __decorateClass([
+  n4()
+], CompactUvIndexChart.prototype, "language", 2);
+__decorateClass([
   r5()
 ], CompactUvIndexChart.prototype, "active", 2);
 CompactUvIndexChart = __decorateClass([
   t3("compact-uv-index-chart")
 ], CompactUvIndexChart);
+function heightOf(value, top) {
+  return value / top * (HEIGHT - TOP);
+}
+function lineOf(step) {
+  return step - 0.5;
+}
+function stepsShown(top) {
+  const lines = marksUnder(top, MARKS.map(lineOf));
+  return MARKS.filter((step) => lines.includes(lineOf(step)));
+}
+function marksUnder(top, candidates) {
+  const pixels = (value) => heightOf(value, top) * (PLOT_HEIGHT / HEIGHT);
+  const marks = [];
+  for (const value of candidates) {
+    const clear = marks.every((mark) => Math.abs(pixels(value) - pixels(mark)) >= MARK_GAP);
+    if (value <= top && pixels(value) >= BASELINE_GAP && clear) {
+      marks.push(value);
+    }
+  }
+  return marks.sort((a3, b3) => a3 - b3);
+}
 function indexAt(kind, items, share, start, end) {
   if (kind === "bars") {
     return Math.min(Math.floor(share * items.length), items.length - 1);
@@ -877,7 +954,7 @@ function indexAt(kind, items, share, start, end) {
 }
 
 // src/const.ts
-var CARD_VERSION = "1.0.0";
+var CARD_VERSION = "1.1.0";
 
 // src/history.ts
 var HOUR = 36e5;
@@ -1755,6 +1832,7 @@ var CompactUvIndexCard = class extends i4 {
             kind="bars"
             .items=${items}
             .floor=${CHART_FLOOR}
+            .language=${language}
             .heading=${this.text("common.daily_chart", { days: String(count) })}
             .brief=${this.text("common.daily_chart_short", { days: String(count) })}
         ></compact-uv-index-chart>`;
@@ -1791,6 +1869,7 @@ var CompactUvIndexCard = class extends i4 {
             .start=${start}
             .end=${end}
             .floor=${CHART_FLOOR}
+            .language=${language}
             .heading=${this.text("common.hourly_chart", { hours: String(hours) })}
             .brief=${this.text("common.hourly_chart_short", { hours: String(hours) })}
         ></compact-uv-index-chart>`;
