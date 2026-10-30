@@ -6,8 +6,8 @@ it.
 [![GitHub Release][releases-shield]][releases] [![GitHub Release Date][release-date-shield]][releases] [![HACS][hacs-shield]][hacs] [![License][license-shield]](LICENSE)
 
 <p>
-<img src="https://raw.githubusercontent.com/jesmak/compact-uv-index-card/main/docs/images/everything-light.png#gh-light-mode-only" width="400" alt="A sun with five of its twelve rays lit beside a UV index of 5.4, moderate, and today's peak, protection advice under it, then the peaks of yesterday, the past week and the past month, and bars of the last 14 days' peaks in their levels' colours against dashed lines marking 3 and 6">
-<img src="https://raw.githubusercontent.com/jesmak/compact-uv-index-card/main/docs/images/everything-dark.png#gh-dark-mode-only" width="400" alt="A sun with five of its twelve rays lit beside a UV index of 5.4, moderate, and today's peak, protection advice under it, then the peaks of yesterday, the past week and the past month, and bars of the last 14 days' peaks in their levels' colours against dashed lines marking 3 and 6">
+<img src="https://raw.githubusercontent.com/jesmak/compact-uv-index-card/main/docs/images/everything-light.png#gh-light-mode-only" width="400" alt="A sun with five of its twelve rays lit beside a UV index of 5.4, moderate, and today's peak, protection advice under it, then the peaks of yesterday, the past week and the past month, and bars of the last 14 days' peaks in their levels' colours against a dashed line marking 3">
+<img src="https://raw.githubusercontent.com/jesmak/compact-uv-index-card/main/docs/images/everything-dark.png#gh-dark-mode-only" width="400" alt="A sun with five of its twelve rays lit beside a UV index of 5.4, moderate, and today's peak, protection advice under it, then the peaks of yesterday, the past week and the past month, and bars of the last 14 days' peaks in their levels' colours against a dashed line marking 3">
 <img src="https://raw.githubusercontent.com/jesmak/compact-uv-index-card/main/docs/images/sizes-light.png#gh-light-mode-only" width="400" alt="The same card at five sizes in one section, from a quarter of its width and one row to all of it and three rows, the sun beside the figures, above them, or small beside unlabelled figures">
 <img src="https://raw.githubusercontent.com/jesmak/compact-uv-index-card/main/docs/images/sizes-dark.png#gh-dark-mode-only" width="400" alt="The same card at five sizes in one section, from a quarter of its width and one row to all of it and three rows, the sun beside the figures, above them, or small beside unlabelled figures">
 </p>
@@ -111,7 +111,8 @@ The card measures the space it gets and lays itself out to fit:
 
 The advice, the recent days and the charts go under the sun, across the card, the recent days and each chart on a tile
 of their own. In a sections view the card starts at half the width and three rows, with a row more for the recent
-days and for each chart, and can be resized down to a quarter of the width and one row. When it is too low for
+days and for each chart, and can be resized down to a quarter of the width and one row. With its rows set to automatic
+it keeps that height, so it always fills whole rows. When it is too low for
 everything, the hourly chart is left out first, then the daily bars, then the recent days and last the advice, rather
 than squeezing the figures out of their labels. The figures are never cut short. When they need the room, the sun gets
 narrower. Otherwise it keeps its shape, growing with the card's height and shrinking with it.

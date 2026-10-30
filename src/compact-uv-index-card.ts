@@ -101,6 +101,8 @@ export function fitCard(content: HTMLElement): void {
 @customElement("compact-uv-index-card")
 export class CompactUvIndexCard extends LitElement {
     @property({ attribute: false }) public hass?: HomeAssistant;
+    /** Set by the dashboard: "grid" in a sections view. */
+    @property({ attribute: false }) public layout?: string;
     @state() private config?: CompactUvIndexCardConfig;
     /** The highest index of recent days, from the recorder. Today's is replaced with today's peak. */
     @state() private days?: DayPeak[];
@@ -335,7 +337,7 @@ export class CompactUvIndexCard extends LitElement {
         return html`
             <ha-card
                 class=${tappable ? "tappable" : ""}
-                style=${this.colours()}
+                style=${[this.colours(), this.autoHeight()].filter(Boolean).join("; ")}
                 role=${tappable ? "button" : nothing}
                 tabindex=${tappable ? "0" : nothing}
                 aria-label=${[
@@ -502,6 +504,21 @@ export class CompactUvIndexCard extends LitElement {
     /** The outline's colour given in the configuration; without it the card follows the theme. */
     private colours(): string {
         return this.config?.border_colour ? `--uv-index-outline-color: ${this.config.border_colour}` : "";
+    }
+
+    /**
+     * In a sections view whose rows are left automatic, the card takes the height of the rows it asks for by default
+     * (56 px each and the 8 px gaps between them) rather than its contents', which would leave part of its last row
+     * empty. Given a number of rows, it fills them, and in a masonry view its contents decide.
+     */
+    private autoHeight(): string {
+        const grid = this.config?.grid_options as { rows?: unknown } | undefined;
+        const older = this.config?.layout_options as { grid_rows?: unknown } | undefined;
+        const rows = grid ? grid.rows : older?.grid_rows;
+        if (this.layout !== "grid" || typeof rows === "number") {
+            return "";
+        }
+        return `height: ${(3 + this.parts()) * 64 - 8}px`;
     }
 
     private act(gesture: Gesture): void {
@@ -987,6 +1004,13 @@ export class CompactUvIndexCard extends LitElement {
                 .glow {
                     animation: none;
                 }
+            }
+
+            /* The same gap under every part at every width, so the peaks and the charts are evenly spaced down to the card's
+               edge. A chart is 54 px, so with its gap it takes exactly the 64 px row it asks for. */
+            .content .extras,
+            .content .chart {
+                margin-bottom: 10px;
             }
         `;
     }

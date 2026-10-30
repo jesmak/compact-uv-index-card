@@ -264,6 +264,29 @@ describe("the size of the card", () => {
         expect(element.getGridOptions().rows).toBe(4);
     });
 
+    it.each([
+        ["automatic rows in a sections view", "grid", { grid_options: { rows: "auto" } }, "height: 312px"],
+        ["the older layout options' automatic rows in a sections view", "grid", { layout_options: { grid_rows: "auto" } }, "height: 312px"],
+        ["no rows given in a sections view", "grid", {}, "height: 312px"],
+        ["a number of rows in a sections view", "grid", { grid_options: { rows: 3 } }, ""],
+        ["a masonry view", undefined, { grid_options: { rows: "auto" } }, ""],
+    ])("is as tall as its own rows with %s, and otherwise fills the space it gets", async (_name, layout, extra, height) => {
+        const element = document.createElement("compact-uv-index-card") as CompactUvIndexCard;
+        element.setConfig({
+            type: "custom:compact-uv-index-card",
+            entity: UV,
+            show_daily_chart: true,
+            show_hourly_chart: true,
+            ...extra,
+        } as never);
+        element.hass = hass();
+        element.layout = layout;
+        document.body.append(element);
+        await element.updateComplete;
+        const style = root(element).querySelector("ha-card")?.getAttribute("style") ?? "";
+        expect(style.split("; ").find((part) => part.startsWith("height")) ?? "").toBe(height);
+    });
+
     it("leaves out the hourly chart first, then the daily one, the peaks and the advice, until the rest fits", () => {
         const { content } = layout({ card: 200, content: () => 420 - hidden() * 60 });
         fitCard(content);

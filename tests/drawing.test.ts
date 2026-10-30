@@ -64,11 +64,11 @@ describe("the marker lines", () => {
         [5.5, [3, 6]],
         [6, [3, 6]],
         [9, [3, 8]],
-        [12, [3, 8]],
+        [12, [6]],
         [15, [6]],
         [20, [6]],
-        [35, [8]],
-        [50, [11]],
+        [35, [11]],
+        [50, []],
         [60, []],
     ])("show the steps the chart reaches, apart enough for their values, at a top of %s", (top, steps) => {
         expect(stepsShown(top)).toEqual(steps);

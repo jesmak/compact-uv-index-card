@@ -668,7 +668,7 @@ var GestureDetector = class {
 var WIDTH = 100;
 var HEIGHT = 32;
 var TOP = 2;
-var PLOT_HEIGHT = 30;
+var PLOT_HEIGHT = 24;
 var MARKS = [3, 6, 8, 11];
 var MARK_GAP = 10;
 var BASELINE_GAP = 5;
@@ -790,12 +790,12 @@ var CompactUvIndexChart = class extends i4 {
                 position: relative;
                 flex: 1;
                 min-width: 0;
-                height: 30px;
+                height: 24px;
                 touch-action: pan-y;
             }
             .axis {
                 position: relative;
-                height: 30px;
+                height: 24px;
                 margin-right: 4px;
                 font-size: 9px;
                 line-height: 9px;
@@ -1726,7 +1726,7 @@ var CompactUvIndexCard = class extends i4 {
     return b2`
             <ha-card
                 class=${tappable ? "tappable" : ""}
-                style=${this.colours()}
+                style=${[this.colours(), this.autoHeight()].filter(Boolean).join("; ")}
                 role=${tappable ? "button" : A}
                 tabindex=${tappable ? "0" : A}
                 aria-label=${[
@@ -1877,6 +1877,20 @@ var CompactUvIndexCard = class extends i4 {
   /** The outline's colour given in the configuration; without it the card follows the theme. */
   colours() {
     return this.config?.border_colour ? `--uv-index-outline-color: ${this.config.border_colour}` : "";
+  }
+  /**
+   * In a sections view whose rows are left automatic, the card takes the height of the rows it asks for by default
+   * (56 px each and the 8 px gaps between them) rather than its contents', which would leave part of its last row
+   * empty. Given a number of rows, it fills them, and in a masonry view its contents decide.
+   */
+  autoHeight() {
+    const grid = this.config?.grid_options;
+    const older = this.config?.layout_options;
+    const rows = grid ? grid.rows : older?.grid_rows;
+    if (this.layout !== "grid" || typeof rows === "number") {
+      return "";
+    }
+    return `height: ${(3 + this.parts()) * 64 - 8}px`;
   }
   act(gesture) {
     this.dispatchEvent(
@@ -2359,12 +2373,22 @@ var CompactUvIndexCard = class extends i4 {
                     animation: none;
                 }
             }
+
+            /* The same gap under every part at every width, so the peaks and the charts are evenly spaced down to the card's
+               edge. A chart is 54 px, so with its gap it takes exactly the 64 px row it asks for. */
+            .content .extras,
+            .content .chart {
+                margin-bottom: 10px;
+            }
         `;
   }
 };
 __decorateClass([
   n4({ attribute: false })
 ], CompactUvIndexCard.prototype, "hass", 2);
+__decorateClass([
+  n4({ attribute: false })
+], CompactUvIndexCard.prototype, "layout", 2);
 __decorateClass([
   r5()
 ], CompactUvIndexCard.prototype, "config", 2);
