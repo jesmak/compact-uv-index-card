@@ -246,23 +246,20 @@ export class CompactUvIndexChart extends LitElement {
 
             /* The narrow overrides come last, so that they win over the rules above. */
 
-            /* In the narrowest cards, three or four columns of a section: the short heading, a little smaller. */
+            /*
+             * In the narrowest cards, three or four columns of a section: the short heading, a little smaller, which
+             * takes two lines when it doesn't fit on one rather than lose its period.
+             */
             @container chart (max-width: 130px) {
                 .heading {
                     font-size: 10px;
+                    white-space: normal;
                 }
                 .long {
                     display: none;
                 }
                 .brief {
                     display: inline;
-                }
-            }
-
-            /* The narrowest of all: the heading may take two lines rather than lose its period. */
-            @container chart (max-width: 100px) {
-                .heading {
-                    white-space: normal;
                 }
             }
         `;

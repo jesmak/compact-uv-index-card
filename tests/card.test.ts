@@ -319,6 +319,40 @@ describe("the size of the card", () => {
         expect(gauge.style.getPropertyValue("--sun-width")).toBe("104px");
     });
 
+    it("puts the peaks one to a row only when one of them doesn't fit its column side by side", () => {
+        const peaks = (widths: number[]) => {
+            const content = document.createElement("div");
+            const extras = document.createElement("div");
+            extras.className = "extras";
+            for (const width of widths) {
+                const extra = document.createElement("span");
+                extra.className = "extra";
+                for (const name of ["label", "amount"]) {
+                    const text = document.createElement("span");
+                    text.className = name;
+                    // A column is 80 px side by side, the whole card's width one to a row.
+                    Object.defineProperty(text, "clientWidth", { get: () => (extras.classList.contains("stacked") ? 240 : 80) });
+                    Object.defineProperty(text, "scrollWidth", { get: () => width });
+                    extra.append(text);
+                }
+                extras.append(extra);
+            }
+            content.append(extras);
+            document.body.append(content);
+            return { content, extras };
+        };
+
+        const fitting = peaks([60, 80, 70]);
+        fitting.extras.classList.add("stacked");
+        fitCard(fitting.content);
+        expect(fitting.extras.classList.contains("stacked")).toBe(false);
+
+        const long = peaks([60, 81, 70]);
+        fitCard(long.content);
+        expect(long.extras.classList.contains("stacked")).toBe(true);
+        expect(long.extras.style.height).toBe("");
+    });
+
     it("measures its own width, so its layout follows the space it is given", () => {
         const styles = (customElements.get("compact-uv-index-card") as unknown as { styles: { cssText: string } }).styles.cssText;
         expect(styles).toContain("container: gauge / inline-size");
