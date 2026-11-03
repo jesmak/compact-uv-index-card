@@ -161,7 +161,9 @@ export class CompactUvIndexChart extends LitElement {
             .brief {
                 display: none;
             }
+            /* A chart reads left to right in any language, as its time does, so its axis stays on the left of the plot. */
             .frame {
+                direction: ltr;
                 display: flex;
                 align-items: flex-start;
                 margin-bottom: 2px;

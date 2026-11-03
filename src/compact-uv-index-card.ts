@@ -718,7 +718,7 @@ export class CompactUvIndexCard extends LitElement {
                 gap: 2px;
                 height: 0.7em;
                 height: 1cap;
-                margin-left: 6px;
+                margin-inline-start: 6px;
             }
 
             .levels i {
@@ -798,8 +798,8 @@ export class CompactUvIndexCard extends LitElement {
                 position: absolute;
                 top: 0;
                 bottom: 0;
-                left: -11px;
-                border-left: 1px solid var(--divider-color, rgba(127, 127, 127, 0.3));
+                inset-inline-start: -11px;
+                border-inline-start: 1px solid var(--divider-color, rgba(127, 127, 127, 0.3));
             }
 
             /* Each on one line, so that fitExtras() can tell when a peak doesn't fit its column. */
