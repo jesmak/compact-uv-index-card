@@ -3,7 +3,7 @@
 Home Assistant dashboard card that shows the UV index as a sun with a ray for each step, at any size a dashboard gives
 it.
 
-[![GitHub Release][releases-shield]][releases] [![GitHub Release Date][release-date-shield]][releases] [![HACS][hacs-shield]][hacs] [![License][license-shield]](LICENSE)
+[![GitHub Release][releases-shield]][releases] [![GitHub Release Date][release-date-shield]][releases] [![Marketplace][marketplace-shield]][marketplace] [![License][license-shield]](LICENSE)
 
 <p>
 <img src="https://raw.githubusercontent.com/jesmak/compact-uv-index-card/main/docs/images/everything-light.png#gh-light-mode-only" width="400" alt="A sun with five of its twelve rays lit beside a UV index of 5.4, moderate, and today's peak, protection advice under it, then the peaks of yesterday, the past week and the past month, and bars of the last 14 days' peaks in their levels' colours against a dashed line marking 3">
@@ -38,10 +38,11 @@ form.
 
 ## Installation
 
-### With HACS
+### With the Marketplace
 
-1. Search for Compact UV index card in HACS and download it
-2. Refresh your browser
+1. Open Settings › Marketplace and search for Compact UV index card
+2. Open it and choose Install
+3. Refresh your browser
 
 ### Manual
 
@@ -169,7 +170,7 @@ npm run check
 ```
 
 `npm run check` typechecks, lints, checks formatting, runs the tests and builds `dist/compact-uv-index-card.js`, which
-is the file HACS installs and is committed to the repository.
+is the file the Marketplace installs and is committed to the repository.
 
 | Path                           | What it contains                                                 |
 | ------------------------------ | ---------------------------------------------------------------- |
@@ -203,6 +204,6 @@ MIT, see [LICENSE](LICENSE).
 [releases-shield]: https://img.shields.io/github/release/jesmak/compact-uv-index-card.svg?style=for-the-badge
 [release-date-shield]: https://img.shields.io/github/release-date/jesmak/compact-uv-index-card?style=for-the-badge
 [releases]: https://github.com/jesmak/compact-uv-index-card/releases
-[hacs-shield]: https://img.shields.io/badge/HACS-Default-green.svg?style=for-the-badge
-[hacs]: https://my.home-assistant.io/redirect/hacs_repository/?owner=jesmak&repository=compact-uv-index-card&category=plugin
+[marketplace-shield]: https://img.shields.io/badge/Marketplace-Default-green.svg?style=for-the-badge
+[marketplace]: https://my.home-assistant.io/redirect/marketplace_repository/?owner=jesmak&repository=compact-uv-index-card&category=plugin
 [license-shield]: https://img.shields.io/github/license/jesmak/compact-uv-index-card.svg?style=for-the-badge
