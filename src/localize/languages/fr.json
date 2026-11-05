@@ -1,0 +1,62 @@
+{
+  "common": {
+    "name": "Indice UV compact",
+    "description": "L'indice UV sous forme de soleil avec un rayon par palier, son niveau et le pic du jour",
+    "invalid_configuration": "Choisissez un capteur d'indice UV pour la carte",
+    "invalid_hourly_chart_hours": "Le nombre d'heures du graphique doit être un nombre",
+    "invalid_daily_chart_days": "Le nombre de jours des barres doit être un nombre",
+    "no_entity": "Capteur introuvable :",
+    "index": "Indice UV",
+    "index_short": "UV",
+    "peak": "Pic du jour",
+    "peak_short": "Pic",
+    "yesterday": "Hier",
+    "week": "7 derniers jours",
+    "month": "30 derniers jours",
+    "daily_chart": "Pic quotidien, {days} derniers jours",
+    "hourly_chart": "Indice UV, {hours} dernières h",
+    "yesterday_short": "1 j",
+    "week_short": "7 j",
+    "month_short": "30 j",
+    "daily_chart_short": "Pic, {days} j",
+    "hourly_chart_short": "UV, {hours} h"
+  },
+  "level": {
+    "low": "Faible",
+    "moderate": "Modéré",
+    "high": "Élevé",
+    "very_high": "Très élevé",
+    "extreme": "Extrême"
+  },
+  "advice": {
+    "protect": "Protégez-vous en milieu de journée. Ombre, vêtements, chapeau et crème solaire.",
+    "avoid": "Évitez le soleil en milieu de journée. Cherchez l'ombre, portez des vêtements couvrants, un chapeau et de la crème solaire."
+  },
+  "editor": {
+    "entity": "Capteur d'indice UV",
+    "entity_helper": "L'indice UV actuel.",
+    "border_colour": "Couleur du contour",
+    "language": "Langue",
+    "language_helper": "Langue de Home Assistant si laissé vide.",
+    "interactions": "Interactions",
+    "tap_action": "Appui simple",
+    "hold_action": "Appui long",
+    "double_tap_action": "Double appui",
+    "display": "Affichage",
+    "animate_sun": "Animation du soleil",
+    "animate_sun_helper": "Les rayons allumés brillent tant que le soleil est levé.",
+    "show_level": "Niveau",
+    "show_level_helper": "Barres à côté de l'indice et nom du niveau en dessous, de faible à extrême.",
+    "show_advice": "Conseils de protection",
+    "show_advice_helper": "Comment se protéger, à partir d'un indice de 3.",
+    "show_yesterday": "Pic d'hier",
+    "show_week": "Pic des 7 derniers jours",
+    "show_month": "Pic des 30 derniers jours",
+    "charts": "Graphiques",
+    "show_daily_chart": "Barres des pics quotidiens",
+    "daily_chart_days": "Nombre de jours des barres",
+    "show_hourly_chart": "Graphique de l'indice",
+    "hourly_chart_hours": "Nombre d'heures du graphique",
+    "hourly_chart_hours_helper": "Jusqu'à 168 heures (une semaine). L'enregistreur conserve l'historique pendant dix jours par défaut."
+  }
+}
