@@ -69,9 +69,9 @@ can also be written by hand.
 | `show_week`          | boolean | The highest index of the last 7 days                               | `false`                           |
 | `show_month`         | boolean | The highest index of the last 30 days                              | `false`                           |
 | `show_daily_chart`   | boolean | Each day's highest index, as bars                                  | `false`                           |
-| `daily_chart_days`   | number  | How many days the bars show, from 2 to 60                          | 14                                |
+| `daily_chart_days`   | number  | How many days the bars show, from 2 to 60                          | `14`                              |
 | `show_hourly_chart`  | boolean | The index over the last hours, as a line                           | `false`                           |
-| `hourly_chart_hours` | number  | How many hours the line shows, from 1 to 168                       | 24                                |
+| `hourly_chart_hours` | number  | How many hours the line shows, from 1 to 168                       | `24`                              |
 | `border_colour`      | string  | Any CSS colour for the sun's outline                               | the theme's secondary text colour |
 | `tap_action`         | object  | What a tap does, as for Home Assistant's own cards                 | `action: more-info`               |
 | `hold_action`        | object  | What holding it does                                               | none                              |
@@ -85,8 +85,8 @@ The index is written in your locale, in the sensor's own display precision when 
 otherwise to one decimal at most. While the sensor is unavailable its figure is a dash, no ray is lit and the disc is
 empty. The disc is empty at night too, when the index is 0.
 
-The levels and their colours are the WHO's, read on the index rounded to a whole number, as it is reported. 2.6 is
-a 3, which is moderate.
+The levels and their colours are the WHO's, read on the index as the card shows it, rounded to a whole number. 2.6 is
+a 3, which is moderate, and so is 2.46, which shows as 2.5.
 
 | Index     | Level     | Rays lit  | Advice                     |
 | --------- | --------- | --------- | -------------------------- |

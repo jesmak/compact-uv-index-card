@@ -1647,11 +1647,15 @@ var CompactUvIndexCard = class extends i4 {
     const now = Date.now();
     const count = this.daysNeeded();
     const hours = Math.max(TODAY_HOURS, option(config, "show_hourly_chart") ? this.chartHours() : 0);
-    const quietly = (promise) => promise.catch(() => void 0);
+    const warned = (promise) => promise.catch((error) => {
+      console.warn("compact-uv-index-card: the recorder didn't answer", error);
+      return void 0;
+    });
     try {
       const [days, points] = await Promise.all([
-        count > 0 ? quietly(fetchDays(hass, config.entity, count, now)) : void 0,
-        quietly(fetchPoints(hass, config.entity, hours, now))
+        count > 0 ? warned(fetchDays(hass, config.entity, count, now)) : void 0,
+        // Without the readings, today's peak is the sensor's own value rather than a dash.
+        warned(fetchPoints(hass, config.entity, hours, now)).then((answer) => answer ?? [])
       ]);
       if (config === this.config) {
         this.days = days;
@@ -2330,6 +2334,8 @@ var CompactUvIndexCard = class extends i4 {
                 flex-direction: row;
                 align-items: stretch;
                 gap: 8px;
+                /* One row leaves 54 px inside the card's border, less than the labelled gauge's least height. */
+                min-height: 0;
                 padding: 6px 10px 6px 8px;
             }
             .gauge.short .sun {
@@ -2416,7 +2422,5 @@ CompactUvIndexCard = __decorateClass([
 ], CompactUvIndexCard);
 export {
   CompactUvIndexCard,
-  REFRESH_INTERVAL,
-  fitCard,
-  fitExtras
+  fitCard
 };

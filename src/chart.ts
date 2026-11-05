@@ -288,7 +288,7 @@ export function stepsShown(top: number): number[] {
  * The values to draw marker lines at, lowest first: the candidates, taken in order of preference, that the chart
  * reaches, leaving out any too close to the baseline or to a line already kept for their values to fit.
  */
-export function marksUnder(top: number, candidates: number[]): number[] {
+function marksUnder(top: number, candidates: number[]): number[] {
     const pixels = (value: number) => heightOf(value, top) * (PLOT_HEIGHT / HEIGHT);
     const marks: number[] = [];
     for (const value of candidates) {

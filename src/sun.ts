@@ -11,7 +11,7 @@ import type { TemplateResult } from "lit";
 import { colourOf, levelOf, roundedIndex } from "./levels";
 
 export const SUN_SIZE = 100;
-export const RAYS = 12;
+const RAYS = 12;
 const CENTRE = 50;
 const DISC = 22;
 const RAY_START = 31;

@@ -36,7 +36,7 @@ describe("languages", () => {
         expect(keys(language("fi")).sort()).toEqual(keys(language("en")).sort());
     });
 
-    it("fall back to English for a text a language lacks, and to the key for one nobody has", () => {
+    it("fall back to English for a language there is no file for, and to the key for a text nobody has", () => {
         expect(translate("fi", "common.index")).toBe("UV-indeksi");
         expect(translate("xx", "common.index")).toBe("UV index");
         expect(translate("fi-FI", "common.index")).toBe("UV-indeksi");

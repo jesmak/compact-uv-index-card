@@ -31,7 +31,7 @@ function languageName(code: string, viewer: string): string {
     }
 }
 
-export function schema(viewer: string) {
+function schema(viewer: string) {
     const toggle = (name: string) => ({ name, selector: { boolean: {} } });
     return [
         { name: "entity", required: true, selector: { entity: { domain: "sensor" } } },
@@ -103,7 +103,7 @@ export function formData(config: CompactUvIndexCardConfig): FormData {
 }
 
 /** The configuration for what the form holds: short, without defaults or emptied options. */
-export function configOf(data: FormData): CompactUvIndexCardConfig {
+function configOf(data: FormData): CompactUvIndexCardConfig {
     const config = { ...data } as CompactUvIndexCardConfig;
     for (const key of OPTIONAL) {
         const value = config[key];

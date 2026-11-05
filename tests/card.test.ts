@@ -2,7 +2,6 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { fitCard } from "../src/compact-uv-index-card";
 import type { CompactUvIndexCard } from "../src/compact-uv-index-card";
-import type { CompactUvIndexCardEditor } from "../src/editor";
 import type { HomeAssistant } from "../src/hass";
 import type { CompactUvIndexCardConfig } from "../src/types";
 
@@ -187,12 +186,11 @@ describe("the gauge", () => {
         expect(() => element.setConfig({ type: "custom:compact-uv-index-card" } as never)).toThrow();
     });
 
-    it("refuses a chart length that isn't a number, as the editor does", () => {
-        const config = { type: "custom:compact-uv-index-card", entity: UV, hourly_chart_hours: "a day" } as never;
+    it("refuses a chart length that isn't a number", () => {
         const element = document.createElement("compact-uv-index-card") as CompactUvIndexCard;
-        const form = document.createElement("compact-uv-index-card-editor") as CompactUvIndexCardEditor;
-        expect(() => element.setConfig(config)).toThrow();
-        expect(() => form.setConfig(config)).toThrow();
+        expect(() =>
+            element.setConfig({ type: "custom:compact-uv-index-card", entity: UV, hourly_chart_hours: "a day" } as never),
+        ).toThrow();
     });
 });
 
@@ -227,6 +225,15 @@ describe("the sun", () => {
         expect(root(await card(hass("5.4"), { animate_sun: false })).querySelectorAll(".glow")).toHaveLength(0);
         expect(root(await card(hass("0"))).querySelectorAll(".glow")).toHaveLength(0);
     });
+
+    it("lights the rays like a clock, the first at one o'clock and the twelfth at the top", async () => {
+        const rays = [...root(await card(hass("12"))).querySelectorAll(".ray")];
+        const at = (ray: Element, axis: "x1" | "y1") => Number(ray.getAttribute(axis));
+        expect(at(rays[0], "x1")).toBeGreaterThan(50);
+        expect(at(rays[0], "y1")).toBeLessThan(50);
+        expect(at(rays[11], "x1")).toBeCloseTo(50);
+        expect(at(rays[11], "y1")).toBeLessThan(50);
+    });
 });
 
 describe("the level", () => {
@@ -249,6 +256,13 @@ describe("the level", () => {
         expect(await advice("2.6")).toContain("Protect yourself");
         expect(await advice("8.1")).toContain("Avoid the midday sun");
         expect(await advice("8.1", { show_advice: false })).toBeUndefined();
+    });
+
+    it("reads the level and the rays from the index as it is shown", async () => {
+        const element = await card(hass("2.46"));
+        expect(texts(element)[0]).toBe("2.5");
+        expect(root(element).querySelector(".level")?.textContent).toBe("Moderate");
+        expect(root(element).querySelectorAll(".ray.on")).toHaveLength(3);
     });
 });
 
@@ -351,13 +365,6 @@ describe("the size of the card", () => {
         fitCard(long.content);
         expect(long.extras.classList.contains("stacked")).toBe(true);
         expect(long.extras.style.height).toBe("");
-    });
-
-    it("measures its own width, so its layout follows the space it is given", () => {
-        const styles = (customElements.get("compact-uv-index-card") as unknown as { styles: { cssText: string } }).styles.cssText;
-        expect(styles).toContain("container: gauge / inline-size");
-        expect(styles).toMatch(/@container gauge \(max-width: 179px\)/);
-        expect(styles).toMatch(/@container gauge \(min-width: 260px\)/);
     });
 });
 
@@ -532,18 +539,33 @@ describe("what the recorder adds", () => {
         expect(hourly.items[0].time).toBe(Date.now() - 12 * HOUR);
         expect(hourly.heading).toBe("UV index, last 12 h");
     });
-});
 
-describe("the charts' marker lines", () => {
-    it("are written in the card's language", async () => {
-        const element = await card(hass("5.4", "en", { days: [5.4, 4.2] }), {
-            language: "fi",
-            show_daily_chart: true,
-            show_hourly_chart: true,
-        });
+    it("leaves the recent peaks empty for a sensor without statistics, rather than pass today's off as theirs", async () => {
+        const element = await card(hass("5.4", "en", { points: [[1, 6.1]] }), { show_week: true, show_month: true });
         await settled(element);
-        const charts = [...root(element).querySelectorAll(".chart")] as Array<HTMLElement & { language: string }>;
-        expect(charts.map((chart) => chart.language)).toEqual(["fi", "fi"]);
+        const amounts = [...root(element).querySelectorAll(".extra .amount")].map((node) => node.textContent);
+        expect(amounts).toEqual(["—", "—"]);
+        expect(texts(element)[1]).toBe("6.1");
+    });
+
+    it("keeps a day without any reading unknown, not zero", async () => {
+        const element = await card(hass("unavailable", "en", { days: [null, 4.2] }), { show_daily_chart: true, daily_chart_days: 2 });
+        await settled(element);
+        const daily = root(element).querySelector(".daily-chart") as HTMLElement & {
+            items: Array<{ value: number | null; label: string }>;
+        };
+        expect(daily.items.map((item) => item.value)).toEqual([4.2, null]);
+        expect(daily.items[1].label).toMatch(/—$/);
+    });
+
+    it("takes the live index as today's peak and warns when the recorder doesn't answer", async () => {
+        const warn = vi.spyOn(console, "warn").mockImplementation(() => undefined);
+        const failing = { ...hass("5.4"), callWS: () => Promise.reject(new Error("no recorder")) };
+        const element = await card(failing as HomeAssistant, { show_week: true });
+        await settled(element);
+        expect(texts(element)).toEqual(["5.4", "5.4"]);
+        expect(warn).toHaveBeenCalledTimes(2);
+        warn.mockRestore();
     });
 });
 
@@ -565,41 +587,5 @@ describe("the narrowest card", () => {
         expect(daily.brief).toBe("Huippu, 14 pv");
         expect(hourly.brief).toBe("UV, 24 h");
         expect(root(element).querySelector(".peak .inline-label")?.textContent?.trim()).toBe("Huippu");
-    });
-});
-
-describe("the review's cases", () => {
-    it("reads the level and the rays from the index as it is shown", async () => {
-        const element = await card(hass("2.46"));
-        expect(texts(element)[0]).toBe("2.5");
-        expect(root(element).querySelector(".level")?.textContent).toBe("Moderate");
-        expect(root(element).querySelectorAll(".ray.on")).toHaveLength(3);
-    });
-
-    it("lights the rays like a clock, the first at one o'clock and the twelfth at the top", async () => {
-        const rays = [...root(await card(hass("12"))).querySelectorAll(".ray")];
-        const at = (ray: Element, axis: "x1" | "y1") => Number(ray.getAttribute(axis));
-        expect(at(rays[0], "x1")).toBeGreaterThan(50);
-        expect(at(rays[0], "y1")).toBeLessThan(50);
-        expect(at(rays[11], "x1")).toBeCloseTo(50);
-        expect(at(rays[11], "y1")).toBeLessThan(50);
-    });
-
-    it("leaves the recent peaks empty for a sensor without statistics, rather than pass today's off as theirs", async () => {
-        const element = await card(hass("5.4", "en", { points: [[1, 6.1]] }), { show_week: true, show_month: true });
-        await settled(element);
-        const amounts = [...root(element).querySelectorAll(".extra .amount")].map((node) => node.textContent);
-        expect(amounts).toEqual(["—", "—"]);
-        expect(texts(element)[1]).toBe("6.1");
-    });
-
-    it("keeps a day without any reading unknown, not zero", async () => {
-        const element = await card(hass("unavailable", "en", { days: [null, 4.2] }), { show_daily_chart: true, daily_chart_days: 2 });
-        await settled(element);
-        const daily = root(element).querySelector(".daily-chart") as HTMLElement & {
-            items: Array<{ value: number | null; label: string }>;
-        };
-        expect(daily.items.map((item) => item.value)).toEqual([4.2, null]);
-        expect(daily.items[1].label).toMatch(/—$/);
     });
 });

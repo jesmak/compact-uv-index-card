@@ -56,7 +56,7 @@ registry.customCards.push({
 });
 
 /** How often the recorder is asked again. Hourly statistics change once an hour. */
-export const REFRESH_INTERVAL = 15 * 60_000;
+const REFRESH_INTERVAL = 15 * 60_000;
 /** Today's peak needs the readings since midnight, so at least a day of them is always read. */
 const TODAY_HOURS = 24;
 /** The least the charts' top stands for: index 3, from which protection is needed. */
@@ -75,7 +75,7 @@ function labelledFits(gauge: HTMLElement): boolean {
  * Puts the peaks one to a row when side by side any of them doesn't fit its column, its name and its value each on
  * one line. They are held to their drawn height while they are measured, so the card doesn't change height.
  */
-export function fitExtras(content: HTMLElement): void {
+function fitExtras(content: HTMLElement): void {
     const extras = content.querySelector<HTMLElement>(".extras");
     if (!extras) {
         return;
@@ -253,11 +253,16 @@ export class CompactUvIndexCard extends LitElement {
         const now = Date.now();
         const count = this.daysNeeded();
         const hours = Math.max(TODAY_HOURS, option(config, "show_hourly_chart") ? this.chartHours() : 0);
-        const quietly = <T>(promise: Promise<T>) => promise.catch(() => undefined);
+        const warned = <T>(promise: Promise<T>) =>
+            promise.catch((error: unknown) => {
+                console.warn("compact-uv-index-card: the recorder didn't answer", error);
+                return undefined;
+            });
         try {
             const [days, points] = await Promise.all([
-                count > 0 ? quietly(fetchDays(hass, config.entity, count, now)) : undefined,
-                quietly(fetchPoints(hass, config.entity, hours, now)),
+                count > 0 ? warned(fetchDays(hass, config.entity, count, now)) : undefined,
+                // Without the readings, today's peak is the sensor's own value rather than a dash.
+                warned(fetchPoints(hass, config.entity, hours, now)).then((answer) => answer ?? []),
             ]);
             if (config === this.config) {
                 this.days = days;
@@ -968,6 +973,8 @@ export class CompactUvIndexCard extends LitElement {
                 flex-direction: row;
                 align-items: stretch;
                 gap: 8px;
+                /* One row leaves 54 px inside the card's border, less than the labelled gauge's least height. */
+                min-height: 0;
                 padding: 6px 10px 6px 8px;
             }
             .gauge.short .sun {
