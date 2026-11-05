@@ -1,4 +1,4 @@
-/*! compact-uv-index-card 1.1.1 | MIT License */
+/*! compact-uv-index-card 1.1.2 | MIT License */
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __decorateClass = (decorators, target, key, kind) => {
@@ -953,7 +953,7 @@ function indexAt(kind, items, share, start, end) {
 }
 
 // src/const.ts
-var CARD_VERSION = "1.1.1";
+var CARD_VERSION = "1.1.2";
 
 // src/history.ts
 var HOUR = 36e5;
@@ -1182,8 +1182,72 @@ var fi_default = {
   }
 };
 
+// src/localize/languages/fr.json
+var fr_default = {
+  common: {
+    name: "Indice UV compact",
+    description: "L'indice UV sous forme de soleil avec un rayon par palier, son niveau et le pic du jour",
+    invalid_configuration: "Choisissez un capteur d'indice UV pour la carte",
+    invalid_hourly_chart_hours: "Le nombre d'heures du graphique doit \xEAtre un nombre",
+    invalid_daily_chart_days: "Le nombre de jours des barres doit \xEAtre un nombre",
+    no_entity: "Capteur introuvable :",
+    index: "Indice UV",
+    index_short: "UV",
+    peak: "Pic du jour",
+    peak_short: "Pic",
+    yesterday: "Hier",
+    week: "7 derniers jours",
+    month: "30 derniers jours",
+    daily_chart: "Pic quotidien, {days} derniers jours",
+    hourly_chart: "Indice UV, {hours} derni\xE8res h",
+    yesterday_short: "1 j",
+    week_short: "7 j",
+    month_short: "30 j",
+    daily_chart_short: "Pic, {days} j",
+    hourly_chart_short: "UV, {hours} h"
+  },
+  level: {
+    low: "Faible",
+    moderate: "Mod\xE9r\xE9",
+    high: "\xC9lev\xE9",
+    very_high: "Tr\xE8s \xE9lev\xE9",
+    extreme: "Extr\xEAme"
+  },
+  advice: {
+    protect: "Prot\xE9gez-vous en milieu de journ\xE9e. Ombre, v\xEAtements, chapeau et cr\xE8me solaire.",
+    avoid: "\xC9vitez le soleil en milieu de journ\xE9e. Cherchez l'ombre, portez des v\xEAtements couvrants, un chapeau et de la cr\xE8me solaire."
+  },
+  editor: {
+    entity: "Capteur d'indice UV",
+    entity_helper: "L'indice UV actuel.",
+    border_colour: "Couleur du contour",
+    language: "Langue",
+    language_helper: "Langue de Home Assistant si laiss\xE9 vide.",
+    interactions: "Interactions",
+    tap_action: "Appui simple",
+    hold_action: "Appui long",
+    double_tap_action: "Double appui",
+    display: "Affichage",
+    animate_sun: "Animation du soleil",
+    animate_sun_helper: "Les rayons allum\xE9s brillent tant que le soleil est lev\xE9.",
+    show_level: "Niveau",
+    show_level_helper: "Barres \xE0 c\xF4t\xE9 de l'indice et nom du niveau en dessous, de faible \xE0 extr\xEAme.",
+    show_advice: "Conseils de protection",
+    show_advice_helper: "Comment se prot\xE9ger, \xE0 partir d'un indice de 3.",
+    show_yesterday: "Pic d'hier",
+    show_week: "Pic des 7 derniers jours",
+    show_month: "Pic des 30 derniers jours",
+    charts: "Graphiques",
+    show_daily_chart: "Barres des pics quotidiens",
+    daily_chart_days: "Nombre de jours des barres",
+    show_hourly_chart: "Graphique de l'indice",
+    hourly_chart_hours: "Nombre d'heures du graphique",
+    hourly_chart_hours_helper: "Jusqu'\xE0 168 heures (une semaine). L'enregistreur conserve l'historique pendant dix jours par d\xE9faut."
+  }
+};
+
 // src/localize/localize.ts
-var FILES = { "./languages/en.json": en_default, "./languages/fi.json": fi_default };
+var FILES = { "./languages/en.json": en_default, "./languages/fi.json": fi_default, "./languages/fr.json": fr_default };
 var LANGUAGES = Object.fromEntries(
   Object.entries(FILES).map(([path, table]) => [path.replace(/^.*\/|\.json$/g, "").toLowerCase(), table])
 );

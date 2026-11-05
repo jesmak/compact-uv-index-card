@@ -70,7 +70,7 @@ describe("the editor", () => {
         const found = form(await editor());
         const language = found.schema.find((entry) => entry.name === "language") as
             { selector: { select: { options: Array<{ value: string }> } } } | undefined;
-        expect(language?.selector.select.options.map((option) => option.value)).toEqual(["en", "fi"]);
+        expect(language?.selector.select.options.map((option) => option.value)).toEqual(["en", "fi", "fr"]);
     });
 
     it("leaves defaults and emptied options out of the configuration", async () => {
