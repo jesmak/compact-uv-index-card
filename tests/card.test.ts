@@ -181,9 +181,26 @@ describe("the gauge", () => {
         expect(root(element).querySelector(".missing")?.textContent).toContain("sensor.gone");
     });
 
-    it("refuses a configuration without a sensor", () => {
+    it("shows its picker stub with no UV index sensor as a hint, and asks for no history", async () => {
+        const state = { ...hass(), states: {} };
+        const calls = vi.fn();
+        state.callWS = async <T>(message: Record<string, unknown>) => (calls(message), undefined as T);
+        const stub = (customElements.get("compact-uv-index-card") as unknown as typeof CompactUvIndexCard).getStubConfig(state);
+        expect(stub).toEqual({});
         const element = document.createElement("compact-uv-index-card") as CompactUvIndexCard;
-        expect(() => element.setConfig({ type: "custom:compact-uv-index-card" } as never)).toThrow();
+        element.setConfig({ type: "custom:compact-uv-index-card", ...stub } as never);
+        element.hass = state;
+        document.body.append(element);
+        await settled(element);
+        expect(root(element).querySelector(".missing")?.textContent?.trim()).toBe(
+            "No UV index sensor yet. Choose one in the card's settings.",
+        );
+        expect(calls).not.toHaveBeenCalled();
+    });
+
+    it("refuses a sensor that isn't an entity id", () => {
+        const element = document.createElement("compact-uv-index-card") as CompactUvIndexCard;
+        expect(() => element.setConfig({ type: "custom:compact-uv-index-card", entity: ["sensor.uv"] } as never)).toThrow();
     });
 
     it("refuses a chart length that isn't a number", () => {

@@ -6,6 +6,7 @@
         "invalid_hourly_chart_hours": "Hours in the index chart must be a number",
         "invalid_daily_chart_days": "Days in the bars must be a number",
         "no_entity": "Sensor not found:",
+        "no_sensor": "No UV index sensor yet. Choose one in the card's settings.",
         "index": "UV index",
         "index_short": "UV",
         "peak": "Today's peak",

@@ -1,4 +1,4 @@
-/*! compact-uv-index-card 1.1.2 | MIT License */
+/*! compact-uv-index-card 1.1.3 | MIT License */
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __decorateClass = (decorators, target, key, kind) => {
@@ -953,7 +953,7 @@ function indexAt(kind, items, share, start, end) {
 }
 
 // src/const.ts
-var CARD_VERSION = "1.1.2";
+var CARD_VERSION = "1.1.3";
 
 // src/history.ts
 var HOUR = 36e5;
@@ -1063,6 +1063,7 @@ var en_default = {
     invalid_hourly_chart_hours: "Hours in the index chart must be a number",
     invalid_daily_chart_days: "Days in the bars must be a number",
     no_entity: "Sensor not found:",
+    no_sensor: "No UV index sensor yet. Choose one in the card's settings.",
     index: "UV index",
     index_short: "UV",
     peak: "Today's peak",
@@ -1127,6 +1128,7 @@ var fi_default = {
     invalid_hourly_chart_hours: "Indeksikaavion tuntim\xE4\xE4r\xE4n on oltava luku",
     invalid_daily_chart_days: "Pylv\xE4iden p\xE4ivien m\xE4\xE4r\xE4n on oltava luku",
     no_entity: "Sensoria ei l\xF6ydy:",
+    no_sensor: "Ei viel\xE4 UV-indeksin sensoria. Valitse sensori kortin asetuksista.",
     index: "UV-indeksi",
     index_short: "UV",
     peak: "Huippu t\xE4n\xE4\xE4n",
@@ -1629,11 +1631,11 @@ var CompactUvIndexCard = class extends i4 {
     return entity ? { entity } : {};
   }
   setConfig(config) {
-    if (!config || typeof config.entity !== "string" || config.entity === "") {
+    if (!config || config.entity != null && typeof config.entity !== "string") {
       throw new Error(translate(browserLanguage(), "common.invalid_configuration"));
     }
     checkNumbers(config);
-    this.config = { ...config };
+    this.config = { ...config, entity: config.entity ?? "" };
     this.days = void 0;
     this.points = void 0;
     this.fetchedAt = 0;
@@ -1788,6 +1790,9 @@ var CompactUvIndexCard = class extends i4 {
       return A;
     }
     const config = this.config;
+    if (!config.entity) {
+      return b2`<ha-card><div class="missing">${this.text("common.no_sensor")}</div></ha-card>`;
+    }
     const entity = this.hass.states[config.entity];
     if (!entity) {
       return b2`<ha-card><div class="missing">${this.text("common.no_entity")} ${config.entity}</div></ha-card>`;

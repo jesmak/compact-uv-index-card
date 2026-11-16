@@ -6,6 +6,7 @@
         "invalid_hourly_chart_hours": "Indeksikaavion tuntimäärän on oltava luku",
         "invalid_daily_chart_days": "Pylväiden päivien määrän on oltava luku",
         "no_entity": "Sensoria ei löydy:",
+        "no_sensor": "Ei vielä UV-indeksin sensoria. Valitse sensori kortin asetuksista.",
         "index": "UV-indeksi",
         "index_short": "UV",
         "peak": "Huippu tänään",
