@@ -40,6 +40,8 @@ describe("languages", () => {
         expect(translate("fi", "common.index")).toBe("UV-indeksi");
         expect(translate("xx", "common.index")).toBe("UV index");
         expect(translate("fi-FI", "common.index")).toBe("UV-indeksi");
+        expect(translate("fi_FI", "common.index")).toBe("UV-indeksi");
+        expect(translate("xx-YY", "common.index")).toBe(translate("en", "common.index"));
         expect(translate("fi", "no.such.key")).toBe("no.such.key");
     });
 });
